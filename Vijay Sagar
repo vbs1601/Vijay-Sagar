@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .container {
+      display: flex;
+    }
+
+    .item {
+      width: 100px;
+      height: 100px;
+      background-color: #ccc;
+      margin: 10px;
+      cursor: move;
+    }
+
+    .item.dragging {
+      opacity: 0.5;
+    }
+
+    .success-message {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="container1">
+      <div class="item" draggable="true">Item 1</div>
+      <div class="item" draggable="true">Item 2</div>
+      <div class="item" draggable="true">Item 3</div>
+      <div class="item" draggable="true">Item 4</div>
+    </div>
+    <div id="container2"></div>
+  </div>
+
+  <button id="resetBtn">Reset</button>
+
+  <div id="message"></div>
+
+  <script>
+    // Get references to the necessary elements
+    const container1 = document.getElementById('container1');
+    const container2 = document.getElementById('container2');
+    const resetBtn = document.getElementById('resetBtn');
+    const successMessage = document.getElementById('message');
+
+    // Variable to keep track of the dragged item
+    let draggedItem = null;
+
+    // Adding event listeners to container1 for drag and drop functionality
+    container1.addEventListener('dragstart', function (event) {
+      draggedItem = event.target;
+      event.target.classList.add('dragging');
+    });
+
+    container1.addEventListener('dragend', function (event) {
+      event.target.classList.remove('dragging');
+    });
+
+    // Adding event listeners to container2 for accepting the dropped item
+    container2.addEventListener('dragover', function (event) {
+      event.preventDefault();
+    });
+
+    container2.addEventListener('drop', function (event) {
+      event.preventDefault();
+      container2.appendChild(draggedItem);
+      successMessage.innerText = 'Item dropped successfully!';
+    });
+
+    // Adding event listener to reset button for clearing container2 and resetting container1
+    resetBtn.addEventListener('click', function () {
+      container2.innerHTML = '';
+      successMessage.innerText = '';
+      container1.querySelectorAll('.item').forEach(function (item) {
+        container1.appendChild(item);
+      });
+    });
+  </script>
+</body>
+
+</html>
